@@ -1,0 +1,13 @@
+Index: pwc-if.c
+===================================================================
+--- pwc-if.c	(revision 27)
++++ pwc-if.c	(working copy)
+@@ -1648,7 +1648,7 @@
+ 	pos = (unsigned long)pdev->image_data;
+ 	while (size > 0) {
+ 		page = kvirt_to_pa(pos);
+-		if (remap_page_range(vma, start, page, PAGE_SIZE, PAGE_SHARED))
++		if (remap_pfn_range(vma, start, page >> PAGE_SHIFT, PAGE_SIZE, PAGE_SHARED))
+ 			return -EAGAIN;
+ 
+ 		start += PAGE_SIZE;

@@ -10,13 +10,14 @@ Summary:	PWC - decompressor modules for Philips USB webcams
 Summary(pl):	PWC - modu³y dekompresuj±ce obraz z kamer internetowych Philipsa
 Name:		pwc
 Version:	10.0.5
-%define		_rel	0.1
+%define		_rel	1
 Release:	%{_rel}
 License:	GPL
 Group:		Applications/Multimedia
 Source0:	http://www.saillard.org/pwc/%{name}-%{version}.tar.bz2
 # Source0-md5:	8fc8a44a803fc009720ae3b5f2afbd18
 Patch0:		%{name}-Makefile.patch
+Patch1:		%{name}-hotfix-for-kernel-2.6.10.patch
 URL:		http://www.saillard.org/pwc/
 %if %{with kernel}
 %{?with_dist_kernel:BuildRequires:	kernel-module-build >= 2.6.7}
@@ -91,7 +92,8 @@ Ten pakiet zawiera modu³ j±dra Linuksa SMP.
 
 %prep
 %setup -q
-#patch0 -p1
+%patch0 -p1
+%patch1 -p0
 
 %build
 %if %{with kernel}
