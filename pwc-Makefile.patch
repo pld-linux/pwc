@@ -1,0 +1,46 @@
+--- pwc-10.0.5/Makefile.orig	2004-10-21 23:23:32.000000000 +0200
++++ pwc-10.0.5/Makefile	2004-11-14 13:20:30.294666928 +0100
+@@ -1,42 +1,2 @@
+-#
+-# Makefile for the Linux Philips USB Webcam driver
+-# 
+-# NOTE: This make file can serve as both an external Makefile (launched
+-#       directly by the user), or as the sub-dir Makefile used by the kernel
+-#       build system.
+-
+-# If CONFIG_USB_PWC isn't set, we'll assume the user want to build this driver has a module
+-
+-ifndef CONFIG_USB_PWC
+-CONFIG_USB_PWC=m
+-endif
+-
+-ifneq ($(KERNELRELEASE),)
+-
+ pwc-objs	:= pwc-if.o pwc-misc.o pwc-ctrl.o pwc-uncompress.o pwc-dec1.o pwc-dec23.o pwc-kiara.o pwc-timon.o
+-
+-obj-$(CONFIG_USB_PWC) += pwc.o
+-
+-else
+-KVER  := $(shell uname -r)
+-KLINK := $(shell test -e /lib/modules/${KVER}/source/ && echo source || echo build)
+-KDIR  := /lib/modules/$(KVER)/$(KLINK)
+-KMISC := /lib/modules/$(KVER)/kernel/drivers/usb/media
+-PWD := $(shell pwd)
+-
+-
+-
+-default:
+-	$(MAKE) -C $(KDIR) SUBDIRS=$(PWD) modules
+-
+-install: default
+-	install -d $(KMISC)
+-	install -m 644 -c pwc.ko $(KMISC)
+-	/sbin/depmod -a
+-
+-endif
+-
+-clean:
+-	rm -f *.[oas] .*.flags *.ko .*.cmd .*.d .*.tmp *.mod.c 
+-	rm -rf .tmp_versions
+-
++obj-m		+= pwc.o
