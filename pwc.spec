@@ -6,10 +6,10 @@
 %bcond_without	userspace	# don't build userspace package
 %bcond_with	verbose		# verbose build (V=1)
 #
-%define	_modile_file_name	pwc-unofficial.ko
+%define	_module_file_name	pwc-unofficial.ko
 #
-Summary:	PWC - decompressor modules for Philips USB webcams
-Summary(pl):	PWC - modu³y dekompresuj±ce obraz z kamer internetowych Philipsa
+Summary:	PWC - module with decompressor for Philips USB webcams
+Summary(pl):	PWC - modu³ z dekompresorem obrazu dla kamer internetowych Philipsa
 Name:		pwc
 Version:	10.0.7a
 %define		_rel	1
@@ -24,12 +24,11 @@ URL:		http://www.saillard.org/linux/pwc/
 %{?with_dist_kernel:BuildRequires:	kernel-module-build >= 2.6.7}
 BuildRequires:	rpmbuild(macros) >= 1.153
 %endif
-BuildRequires:	pkgconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-Decompresor module for Philips webcams, this allows you to use higher
-resoluwion and framerate. Working cameras:
+Module with decompressor for Philips webcams, this allows you to use
+higher resolution and framerate. Working cameras:
 - Philips: PCA645VC and 646VC, "Vesta", "Vesta Pro", "Vesta Scan",
   "ToUCam XS" (PCVC720K/40,/20 is supported by ov511), "ToUCam Fun",
   "ToUCam Pro", "ToUCam Scan", "ToUCam II", "ToUCam Pro II"
@@ -42,8 +41,9 @@ resoluwion and framerate. Working cameras:
 - Visionite VCS UM100 and VCS UC300
 
 %description -l pl
-Modu³ dekompresuj±cy obraz z kamer na uk³adzie Philipsa. Pozwala na
-uzyskanie wiêkszej rozdzielczo¶ci i ilo¶ci klatek. Obs³ugiwane kamery:
+Modu³ z dekompresorem obrazu dla kamer na uk³adzie Philipsa. Pozwala
+na uzyskanie wiêkszej rozdzielczo¶ci i ilo¶ci klatek. Obs³ugiwane
+kamery:
 - Philips: PCA645VC and 646VC, "Vesta", "Vesta Pro", "Vesta Scan",
   "ToUCam XS" (PCVC720K/40, K/20 dzia³a z ov511), "ToUCam Fun",
   "ToUCam Pro", "ToUCam Scan", "ToUCam II", "ToUCam Pro II"
@@ -69,13 +69,13 @@ Requires(post,postun):	/sbin/depmod
 This is driver for Philips USB webcams for Linux.
 
 This package contains Linux module.
-File is called %{_modile_file_name}.
+File is called %{_module_file_name}.
 
 %description -n kernel-video-pwc -l pl
 Sterownik dla Linuksa do kamer internetowych Philipsa.
 
 Ten pakiet zawiera modu³ j±dra Linuksa.
-Plik nazywa siê %{_modile_file_name}.
+Plik nazywa siê %{_module_file_name}.
 
 %package -n kernel-smp-video-pwc
 Summary:	Linux SMP driver for Philips USB webcams
@@ -91,13 +91,13 @@ Requires(post,postun):	/sbin/depmod
 This is driver for Philips USB webcams for Linux.
 
 This package contains Linux SMP module.
-File is called %{_modile_file_name}.
+File is called %{_module_file_name}.
 
 %description -n kernel-smp-video-pwc -l pl
 Sterownik dla Linuksa do kamer internetowych Philipsa.
 
 Ten pakiet zawiera modu³ j±dra Linuksa SMP.
-Plik nazywa siê %{_modile_file_name}.
+Plik nazywa siê %{_module_file_name}.
 
 %prep
 %setup -q
@@ -138,10 +138,10 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with kernel}
 install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/kernel/drivers/usb/media
 install pwc-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist}.ko \
-	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/kernel/drivers/usb/media/%{_modile_file_name}
+	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/kernel/drivers/usb/media/%{_module_file_name}
 %if %{with smp} && %{with dist_kernel}
 install pwc-smp.ko \
-	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/kernel/drivers/usb/media/%{_modile_file_name}
+	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/kernel/drivers/usb/media/%{_module_file_name}
 %endif
 %endif
 
@@ -163,12 +163,12 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with kernel}
 %files -n kernel-video-pwc
 %defattr(644,root,root,755)
-/lib/modules/%{_kernel_ver}/kernel/drivers/usb/media/%{_modile_file_name}*
+/lib/modules/%{_kernel_ver}/kernel/drivers/usb/media/%{_module_file_name}*
 
 %if %{with smp} && %{with dist_kernel}
 %files -n kernel-smp-video-pwc
 %defattr(644,root,root,755)
-/lib/modules/%{_kernel_ver}smp/kernel/drivers/usb/media/%{_modile_file_name}*
+/lib/modules/%{_kernel_ver}smp/kernel/drivers/usb/media/%{_module_file_name}*
 %endif
 %endif
 
