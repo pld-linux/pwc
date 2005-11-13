@@ -11,13 +11,13 @@
 Summary:	PWC - module with decompressor for Philips USB webcams
 Summary(pl):	PWC - modu³ z dekompresorem obrazu dla kamer internetowych Philipsa
 Name:		pwc
-Version:	10.0.7a
+Version:	10.0.9
 %define		_rel	1
 Release:	%{_rel}
 License:	GPL
 Group:		Applications/Multimedia
 Source0:	http://www.saillard.org/linux/pwc/files/%{name}-%{version}.tar.bz2
-# Source0-md5:	8f6f61f49e84690a955a059f39577935
+# Source0-md5:	42206b0bdf3a7312c6ddb194820afd53
 Patch0:		%{name}-hotfix-for-kernel-2.6.10.patch
 URL:		http://www.saillard.org/linux/pwc/
 %if %{with kernel}
@@ -117,7 +117,17 @@ for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}
 	install -d include/{linux,config}
 	ln -sf %{_kernelsrcdir}/config-$cfg .config
 	ln -sf %{_kernelsrcdir}/include/linux/autoconf-$cfg.h include/linux/autoconf.h
-	ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch} include/asm
+%ifarch ppc
+        if [ -d "%{_kernelsrcdir}/include/asm-powerpc" ]; then
+                install -d include/asm
+                cp -a %{_kernelsrcdir}/include/asm-%{_target_base_arch}/* include/asm
+                cp -a %{_kernelsrcdir}/include/asm-powerpc/* include/asm
+        else
+                ln -sf %{_kernelsrcdir}/include/asm-powerpc include/asm
+        fi
+%else
+        ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch} include/asm
+%endif
 	ln -sf %{_kernelsrcdir}/Module.symvers-$cfg Module.symvers
 	touch include/config/MARKER
 	%{__make} -C %{_kernelsrcdir} clean \
