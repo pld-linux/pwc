@@ -6,7 +6,7 @@
 %bcond_without	userspace	# don't build userspace package
 %bcond_with	verbose		# verbose build (V=1)
 #
-%define	_module_file_name	pwc-unofficial.ko
+%define	_module_file_name	pwc-unofficial
 #
 Summary:	PWC - module with decompressor for Philips USB webcams
 Summary(pl):	PWC - modu³ z dekompresorem obrazu dla kamer internetowych Philipsa
@@ -147,12 +147,17 @@ done
 rm -rf $RPM_BUILD_ROOT
 
 %if %{with kernel}
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/modprobe.d/%{_kernel_ver}{,smp}
 install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/kernel/drivers/usb/media
 install pwc-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist}.ko \
-	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/kernel/drivers/usb/media/%{_module_file_name}
+	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/kernel/drivers/usb/media/%{_module_file_name}.ko
+echo "alias pwc %{_module_file_name}" \
+	> $RPM_BUILD_ROOT%{_sysconfdir}/modprobe.d/%{_kernel_ver}/pwc.conf
 %if %{with smp} && %{with dist_kernel}
 install pwc-smp.ko \
-	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/kernel/drivers/usb/media/%{_module_file_name}
+	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/kernel/drivers/usb/media/%{_module_file_name}.ko
+echo "alias pwc %{_module_file_name}" \
+	> $RPM_BUILD_ROOT%{_sysconfdir}/modprobe.d/%{_kernel_ver}smp/pwc.conf
 %endif
 %endif
 
@@ -175,11 +180,13 @@ rm -rf $RPM_BUILD_ROOT
 %files -n kernel-video-pwc
 %defattr(644,root,root,755)
 /lib/modules/%{_kernel_ver}/kernel/drivers/usb/media/%{_module_file_name}*
+%{_sysconfdir}/modprobe.d/%{_kernel_ver}/pwc.conf
 
 %if %{with smp} && %{with dist_kernel}
 %files -n kernel-smp-video-pwc
 %defattr(644,root,root,755)
 /lib/modules/%{_kernel_ver}smp/kernel/drivers/usb/media/%{_module_file_name}*
+%{_sysconfdir}/modprobe.d/%{_kernel_ver}smp/pwc.conf
 %endif
 %endif
 
