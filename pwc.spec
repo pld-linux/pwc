@@ -106,6 +106,7 @@ grep -E "^pwc-objs" Makefile > Makefile.new
 echo "obj-m	+= pwc.o" >> Makefile.new
 echo "CFLAGS	+= -DXAWTV_HAS_BEEN_FIXED=1" >> Makefile.new
 mv -f Makefile{.new,}
+cp -f pwc-if.c pwc-if.c.orig
 
 %build
 %if %{with kernel}
@@ -131,6 +132,12 @@ for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}
 %endif
 	ln -sf %{_kernelsrcdir}/Module.symvers-$cfg Module.symvers
 	touch include/config/MARKER
+	if grep -q "^CONFIG_PREEMPT_RT=y$" .config; then
+		sed 's/SPIN_LOCK_UNLOCKED/SPIN_LOCK_UNLOCKED(pdev->ptrlock)/' \
+			pwc-if.c.orig > pwc-if.c
+	else
+		cat pwc-if.c.orig > pwc-if.c
+	fi
 	%{__make} -C %{_kernelsrcdir} clean \
 		RCS_FIND_IGNORE="-name '*.ko' -o" \
 		M=$PWD O=$PWD \
