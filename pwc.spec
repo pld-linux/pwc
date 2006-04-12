@@ -8,11 +8,11 @@
 #
 %define	_module_file_name	pwc-unofficial
 #
+%define		_rel	1
 Summary:	PWC - module with decompressor for Philips USB webcams
 Summary(pl):	PWC - modu³ z dekompresorem obrazu dla kamer internetowych Philipsa
 Name:		pwc
 Version:	10.0.10
-%define		_rel	1
 Release:	%{_rel}
 License:	GPL
 Group:		Applications/Multimedia
@@ -21,7 +21,7 @@ Source0:	http://www.saillard.org/linux/pwc/files/%{name}-%{version}.tar.bz2
 Patch0:		%{name}-hotfix-for-kernel-2.6.10.patch
 URL:		http://www.saillard.org/linux/pwc/
 %if %{with kernel}
-%{?with_dist_kernel:BuildRequires:	kernel-module-build >= 2.6.7}
+%{?with_dist_kernel:BuildRequires:	kernel-module-build >= 3:2.6.7}
 BuildRequires:	rpmbuild(macros) >= 1.153
 %endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -34,8 +34,8 @@ higher resolution and framerate. Working cameras:
   "ToUCam Pro", "ToUCam Scan", "ToUCam II", "ToUCam Pro II"
 - Askey VC010
 - Creative Labs Webcam: 5 (the old one; USB Product ID: 0x400C)
-- Pro Ex Logitech QuickCam 3000 Pro, 4000 Pro, Notebook Pro,
-  Zoom and Orbit/Sphere
+- Pro Ex Logitech QuickCam 3000 Pro, 4000 Pro, Notebook Pro, Zoom and
+  Orbit/Sphere
 - Samsung MPC-C10 and MPC-C30
 - Sotec Afina Eye
 - Visionite VCS UM100 and VCS UC300
@@ -45,12 +45,12 @@ Modu³ z dekompresorem obrazu dla kamer na uk³adzie Philipsa. Pozwala
 na uzyskanie wiêkszej rozdzielczo¶ci i ilo¶ci klatek. Obs³ugiwane
 kamery:
 - Philips: PCA645VC and 646VC, "Vesta", "Vesta Pro", "Vesta Scan",
-  "ToUCam XS" (PCVC720K/40, K/20 dzia³a z ov511), "ToUCam Fun",
-  "ToUCam Pro", "ToUCam Scan", "ToUCam II", "ToUCam Pro II"
+  "ToUCam XS" (PCVC720K/40, K/20 dzia³a z ov511), "ToUCam Fun", "ToUCam
+  Pro", "ToUCam Scan", "ToUCam II", "ToUCam Pro II"
 - Askey VC010
 - Creative Labs Webcam: 5 (stary typ; USB Product ID: 0x400C)
-- Pro Ex Logitech QuickCam 3000 Pro, 4000 Pro, Notebook Pro,
-  Zoom i Orbit/Sphere
+- Pro Ex Logitech QuickCam 3000 Pro, 4000 Pro, Notebook Pro, Zoom i
+  Orbit/Sphere
 - Samsung MPC-C10 and MPC-C30
 - Sotec Afina Eye
 - Visionite VCS UM100 i VCS UC300.
@@ -68,14 +68,14 @@ Requires(post,postun):	/sbin/depmod
 %description -n kernel-video-pwc
 This is driver for Philips USB webcams for Linux.
 
-This package contains Linux module.
-File is called %{_module_file_name}.
+This package contains Linux module. File is called
+%{_module_file_name}.
 
 %description -n kernel-video-pwc -l pl
 Sterownik dla Linuksa do kamer internetowych Philipsa.
 
-Ten pakiet zawiera modu³ j±dra Linuksa.
-Plik nazywa siê %{_module_file_name}.
+Ten pakiet zawiera modu³ j±dra Linuksa. Plik nazywa siê
+%{_module_file_name}.
 
 %package -n kernel-smp-video-pwc
 Summary:	Linux SMP driver for Philips USB webcams
@@ -90,14 +90,14 @@ Requires(post,postun):	/sbin/depmod
 %description -n kernel-smp-video-pwc
 This is driver for Philips USB webcams for Linux.
 
-This package contains Linux SMP module.
-File is called %{_module_file_name}.
+This package contains Linux SMP module. File is called
+%{_module_file_name}.
 
 %description -n kernel-smp-video-pwc -l pl
 Sterownik dla Linuksa do kamer internetowych Philipsa.
 
-Ten pakiet zawiera modu³ j±dra Linuksa SMP.
-Plik nazywa siê %{_module_file_name}.
+Ten pakiet zawiera modu³ j±dra Linuksa SMP. Plik nazywa siê
+%{_module_file_name}.
 
 %prep
 %setup -q
