@@ -8,21 +8,22 @@
 #
 %define	_module_file_name	pwc-unofficial
 #
-%define		_rel	1
+%define		_rc	rc1
+%define		_rel	0.%{_rc}.1
 Summary:	PWC - module with decompressor for Philips USB webcams
 Summary(pl):	PWC - modu³ z dekompresorem obrazu dla kamer internetowych Philipsa
 Name:		pwc
-Version:	10.0.10
+Version:	10.0.12
 Release:	%{_rel}
 License:	GPL
 Group:		Applications/Multimedia
-Source0:	http://www.saillard.org/linux/pwc/files/%{name}-%{version}.tar.bz2
-# Source0-md5:	a29423adf03d07bee824fe1627911b94
+Source0:	http://www.saillard.org/linux/pwc/files/%{name}-%{version}-%{_rc}.tar.bz2
+# Source0-md5:	8763f3d6fd0f9738ef9854de205a126d
 Patch0:		%{name}-hotfix-for-kernel-2.6.10.patch
 URL:		http://www.saillard.org/linux/pwc/
 %if %{with kernel}
-%{?with_dist_kernel:BuildRequires:	kernel-module-build >= 3:2.6.7}
-BuildRequires:	rpmbuild(macros) >= 1.153
+%{?with_dist_kernel:BuildRequires:	kernel%{alt_kernel}-module-build}
+BuildRequires:	rpmbuild(macros) >= 1.291
 %endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -55,7 +56,7 @@ kamery:
 - Sotec Afina Eye
 - Visionite VCS UM100 i VCS UC300.
 
-%package -n kernel-video-pwc
+%package -n kernel%{alt_kernel}-video-pwc
 Summary:	Linux driver for Philips USB webcams
 Summary(pl):	Sterownik dla Linuksa do kamer internetowych Philipsa
 Release:	%{_rel}@%{_kernel_ver_str}
@@ -65,19 +66,19 @@ Requires(post,postun):	/sbin/depmod
 %requires_releq_kernel_up
 %endif
 
-%description -n kernel-video-pwc
+%description -n kernel%{alt_kernel}-video-pwc
 This is driver for Philips USB webcams for Linux.
 
 This package contains Linux module. File is called
 %{_module_file_name}.
 
-%description -n kernel-video-pwc -l pl
+%description -n kernel%{alt_kernel}-video-pwc -l pl
 Sterownik dla Linuksa do kamer internetowych Philipsa.
 
 Ten pakiet zawiera modu³ j±dra Linuksa. Plik nazywa siê
 %{_module_file_name}.
 
-%package -n kernel-smp-video-pwc
+%package -n kernel%{alt_kernel}-smp-video-pwc
 Summary:	Linux SMP driver for Philips USB webcams
 Summary(pl):	Sterownik dla Linuksa SMP do kamer internetowych Philipsa
 Release:	%{_rel}@%{_kernel_ver_str}
@@ -87,20 +88,20 @@ Requires(post,postun):	/sbin/depmod
 %requires_releq_kernel_smp
 %endif
 
-%description -n kernel-smp-video-pwc
+%description -n kernel%{alt_kernel}-smp-video-pwc
 This is driver for Philips USB webcams for Linux.
 
 This package contains Linux SMP module. File is called
 %{_module_file_name}.
 
-%description -n kernel-smp-video-pwc -l pl
+%description -n kernel%{alt_kernel}-smp-video-pwc -l pl
 Sterownik dla Linuksa do kamer internetowych Philipsa.
 
 Ten pakiet zawiera modu³ j±dra Linuksa SMP. Plik nazywa siê
 %{_module_file_name}.
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{version}-%{_rc}
 %patch0 -p0
 grep -E "^pwc-objs" Makefile > Makefile.new
 echo "obj-m	+= pwc.o" >> Makefile.new
@@ -162,26 +163,26 @@ echo "alias pwc %{_module_file_name}" \
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post -n kernel-video-pwc
+%post -n kernel%{alt_kernel}-video-pwc
 %depmod %{_kernel_ver}
 
-%postun -n kernel-video-pwc
+%postun -n kernel%{alt_kernel}-video-pwc
 %depmod %{_kernel_ver}
 
-%post -n kernel-smp-video-pwc
+%post -n kernel%{alt_kernel}-smp-video-pwc
 %depmod %{_kernel_ver}smp
 
-%postun -n kernel-smp-video-pwc
+%postun -n kernel%{alt_kernel}-smp-video-pwc
 %depmod %{_kernel_ver}smp
 
 %if %{with kernel}
-%files -n kernel-video-pwc
+%files -n kernel%{alt_kernel}-video-pwc
 %defattr(644,root,root,755)
 /lib/modules/%{_kernel_ver}/kernel/drivers/usb/media/%{_module_file_name}*
 %{_sysconfdir}/modprobe.d/%{_kernel_ver}/pwc.conf
 
 %if %{with smp} && %{with dist_kernel}
-%files -n kernel-smp-video-pwc
+%files -n kernel%{alt_kernel}-smp-video-pwc
 %defattr(644,root,root,755)
 /lib/modules/%{_kernel_ver}smp/kernel/drivers/usb/media/%{_module_file_name}*
 %{_sysconfdir}/modprobe.d/%{_kernel_ver}smp/pwc.conf
