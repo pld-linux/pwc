@@ -6,7 +6,7 @@
 %bcond_without	userspace	# don't build userspace package
 %bcond_with	verbose		# verbose build (V=1)
 #
-%define	_module_file_name	pwc-unofficial
+%define	_module_suffix	unofficial
 #
 %define		_rc	rc1
 %define		_rel	0.%{_rc}.1
@@ -23,7 +23,7 @@ Patch0:		%{name}-hotfix-for-kernel-2.6.10.patch
 URL:		http://www.saillard.org/linux/pwc/
 %if %{with kernel}
 %{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.7}
-BuildRequires:	rpmbuild(macros) >= 1.308
+BuildRequires:	rpmbuild(macros) >= 1.326
 %endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -111,53 +111,22 @@ cp -f pwc-if.c pwc-if.c.orig
 
 %build
 %if %{with kernel}
-# kernel module(s)
-for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}; do
-	if [ ! -r "%{_kernelsrcdir}/config-$cfg" ]; then
-		exit 1
-	fi
-	install -d o/include/linux
-	ln -sf %{_kernelsrcdir}/config-$cfg o/.config
-	ln -sf %{_kernelsrcdir}/Module.symvers-$cfg o/Module.symvers
-	ln -sf %{_kernelsrcdir}/include/linux/autoconf-$cfg.h o/include/linux/autoconf.h
-	if grep -q "^CONFIG_PREEMPT_RT=y$" o/.config; then
-		sed 's/SPIN_LOCK_UNLOCKED/SPIN_LOCK_UNLOCKED(pdev->ptrlock)/' \
-			pwc-if.c.orig > pwc-if.c
-	else
-		cat pwc-if.c.orig > pwc-if.c
-	fi
-
-	%if %{with dist_kernel}
-		%{__make} -j1 -C %{_kernelsrcdir} O=$PWD/o prepare scripts
-	%else
-		install -d o/include/config
-		touch o/include/config/MARKER
-		ln -sf %{_kernelsrcdir}/scripts o/scripts
-	%endif
-	%{__make} -C %{_kernelsrcdir} modules \
-		CC="%{__cc}" CPP="%{__cpp}" \
-		M=$PWD O=$PWD/o \
-		%{?with_verbose:V=1}
-	mv pwc{,-$cfg}.ko
-done
+%build_kernel_modules T=$TMPDIR -m pwc <<'EOF'
+# patch only if kernel compiled with realtime-preempt patch
+if grep -q "CONFIG_PREEMPT_RT" o/.config; then
+	sed 's/SPIN_LOCK_UNLOCKED/SPIN_LOCK_UNLOCKED(pdev->ptrlock)/' \
+		pwc-if.c.orig > pwc-if.c
+else
+	cat pwc-if.c.orig > pwc-if.c
+fi
+EOF
 %endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
 %if %{with kernel}
-install -d $RPM_BUILD_ROOT%{_sysconfdir}/modprobe.d/%{_kernel_ver}{,smp}
-install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/kernel/drivers/usb/media
-install pwc-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist}.ko \
-	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/kernel/drivers/usb/media/%{_module_file_name}.ko
-echo "alias pwc %{_module_file_name}" \
-	> $RPM_BUILD_ROOT%{_sysconfdir}/modprobe.d/%{_kernel_ver}/pwc.conf
-%if %{with smp} && %{with dist_kernel}
-install pwc-smp.ko \
-	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/kernel/drivers/usb/media/%{_module_file_name}.ko
-echo "alias pwc %{_module_file_name}" \
-	> $RPM_BUILD_ROOT%{_sysconfdir}/modprobe.d/%{_kernel_ver}smp/pwc.conf
-%endif
+%install_kernel_modules -s %{_module_suffix} -n %{name} -m pwc -d kernel/drivers/usb/media
 %endif
 
 %clean
@@ -178,14 +147,14 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with kernel}
 %files -n kernel%{_alt_kernel}-video-pwc
 %defattr(644,root,root,755)
-/lib/modules/%{_kernel_ver}/kernel/drivers/usb/media/%{_module_file_name}*
-%{_sysconfdir}/modprobe.d/%{_kernel_ver}/pwc.conf
+/lib/modules/%{_kernel_ver}/kernel/drivers/usb/media/pwc-%{_module_suffix}.ko*
+%{_sysconfdir}/modprobe.d/%{_kernel_ver}/%{name}.conf
 
 %if %{with smp} && %{with dist_kernel}
 %files -n kernel%{_alt_kernel}-smp-video-pwc
 %defattr(644,root,root,755)
-/lib/modules/%{_kernel_ver}smp/kernel/drivers/usb/media/%{_module_file_name}*
-%{_sysconfdir}/modprobe.d/%{_kernel_ver}smp/pwc.conf
+/lib/modules/%{_kernel_ver}smp/kernel/drivers/usb/media/pwc-%{_module_suffix}.ko*
+%{_sysconfdir}/modprobe.d/%{_kernel_ver}smp/%{name}.conf
 %endif
 %endif
 
