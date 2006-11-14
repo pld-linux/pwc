@@ -23,7 +23,7 @@ Patch0:		%{name}-hotfix-for-kernel-2.6.10.patch
 URL:		http://www.saillard.org/linux/pwc/
 %if %{with kernel}
 %{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.7}
-BuildRequires:	rpmbuild(macros) >= 1.326
+BuildRequires:	rpmbuild(macros) >= 1.330
 %endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
