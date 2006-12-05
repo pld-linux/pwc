@@ -24,6 +24,7 @@ URL:		http://www.saillard.org/linux/pwc/
 %if %{with kernel}
 %{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.7}
 BuildRequires:	rpmbuild(macros) >= 1.330
+BuildRequires:	sed >= 4.0
 %endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -108,6 +109,7 @@ echo "obj-m	+= pwc.o" >> Makefile.new
 echo "CFLAGS	+= -DXAWTV_HAS_BEEN_FIXED=1" >> Makefile.new
 mv -f Makefile{.new,}
 cp -f pwc-if.c pwc-if.c.orig
+sed -e '/#include <linux.videodev2.h>/a#include <media/v4l2-dev.h>' -i pwc.h
 
 %build
 %if %{with kernel}
