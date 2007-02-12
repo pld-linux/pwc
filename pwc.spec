@@ -11,7 +11,7 @@
 %define		_rc	rc1
 %define		_rel	0.%{_rc}.1
 Summary:	PWC - module with decompressor for Philips USB webcams
-Summary(pl):	PWC - modu≥ z dekompresorem obrazu dla kamer internetowych Philipsa
+Summary(pl.UTF-8):   PWC - modu≈Ç z dekompresorem obrazu dla kamer internetowych Philipsa
 Name:		pwc
 Version:	10.0.12
 Release:	%{_rel}
@@ -42,12 +42,12 @@ higher resolution and framerate. Working cameras:
 - Sotec Afina Eye
 - Visionite VCS UM100 and VCS UC300
 
-%description -l pl
-Modu≥ z dekompresorem obrazu dla kamer na uk≥adzie Philipsa. Pozwala
-na uzyskanie wiÍkszej rozdzielczo∂ci i ilo∂ci klatek. Obs≥ugiwane
+%description -l pl.UTF-8
+Modu≈Ç z dekompresorem obrazu dla kamer na uk≈Çadzie Philipsa. Pozwala
+na uzyskanie wiƒôkszej rozdzielczo≈õci i ilo≈õci klatek. Obs≈Çugiwane
 kamery:
 - Philips: PCA645VC and 646VC, "Vesta", "Vesta Pro", "Vesta Scan",
-  "ToUCam XS" (PCVC720K/40, K/20 dzia≥a z ov511), "ToUCam Fun", "ToUCam
+  "ToUCam XS" (PCVC720K/40, K/20 dzia≈Ça z ov511), "ToUCam Fun", "ToUCam
   Pro", "ToUCam Scan", "ToUCam II", "ToUCam Pro II"
 - Askey VC010
 - Creative Labs Webcam: 5 (stary typ; USB Product ID: 0x400C)
@@ -59,7 +59,7 @@ kamery:
 
 %package -n kernel%{_alt_kernel}-video-pwc
 Summary:	Linux driver for Philips USB webcams
-Summary(pl):	Sterownik dla Linuksa do kamer internetowych Philipsa
+Summary(pl.UTF-8):   Sterownik dla Linuksa do kamer internetowych Philipsa
 Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 Requires(post,postun):	/sbin/depmod
@@ -73,15 +73,15 @@ This is driver for Philips USB webcams for Linux.
 This package contains Linux module. File is called
 %{_module_file_name}.
 
-%description -n kernel%{_alt_kernel}-video-pwc -l pl
+%description -n kernel%{_alt_kernel}-video-pwc -l pl.UTF-8
 Sterownik dla Linuksa do kamer internetowych Philipsa.
 
-Ten pakiet zawiera modu≥ j±dra Linuksa. Plik nazywa siÍ
+Ten pakiet zawiera modu≈Ç jƒÖdra Linuksa. Plik nazywa siƒô
 %{_module_file_name}.
 
 %package -n kernel%{_alt_kernel}-smp-video-pwc
 Summary:	Linux SMP driver for Philips USB webcams
-Summary(pl):	Sterownik dla Linuksa SMP do kamer internetowych Philipsa
+Summary(pl.UTF-8):   Sterownik dla Linuksa SMP do kamer internetowych Philipsa
 Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 Requires(post,postun):	/sbin/depmod
@@ -95,10 +95,10 @@ This is driver for Philips USB webcams for Linux.
 This package contains Linux SMP module. File is called
 %{_module_file_name}.
 
-%description -n kernel%{_alt_kernel}-smp-video-pwc -l pl
+%description -n kernel%{_alt_kernel}-smp-video-pwc -l pl.UTF-8
 Sterownik dla Linuksa do kamer internetowych Philipsa.
 
-Ten pakiet zawiera modu≥ j±dra Linuksa SMP. Plik nazywa siÍ
+Ten pakiet zawiera modu≈Ç jƒÖdra Linuksa SMP. Plik nazywa siƒô
 %{_module_file_name}.
 
 %prep
