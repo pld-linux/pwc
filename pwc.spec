@@ -11,7 +11,7 @@
 %define		_rc	rc1
 %define		_rel	0.%{_rc}.1
 Summary:	PWC - module with decompressor for Philips USB webcams
-Summary(pl.UTF-8):   PWC - moduł z dekompresorem obrazu dla kamer internetowych Philipsa
+Summary(pl.UTF-8):	PWC - moduł z dekompresorem obrazu dla kamer internetowych Philipsa
 Name:		pwc
 Version:	10.0.12
 Release:	%{_rel}
@@ -59,7 +59,7 @@ kamery:
 
 %package -n kernel%{_alt_kernel}-video-pwc
 Summary:	Linux driver for Philips USB webcams
-Summary(pl.UTF-8):   Sterownik dla Linuksa do kamer internetowych Philipsa
+Summary(pl.UTF-8):	Sterownik dla Linuksa do kamer internetowych Philipsa
 Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 Requires(post,postun):	/sbin/depmod
@@ -81,7 +81,7 @@ Ten pakiet zawiera moduł jądra Linuksa. Plik nazywa się
 
 %package -n kernel%{_alt_kernel}-smp-video-pwc
 Summary:	Linux SMP driver for Philips USB webcams
-Summary(pl.UTF-8):   Sterownik dla Linuksa SMP do kamer internetowych Philipsa
+Summary(pl.UTF-8):	Sterownik dla Linuksa SMP do kamer internetowych Philipsa
 Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 Requires(post,postun):	/sbin/depmod
