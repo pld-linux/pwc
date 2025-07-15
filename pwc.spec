@@ -104,7 +104,7 @@ Ten pakiet zawiera moduł jądra Linuksa SMP. Plik nazywa się
 
 %prep
 %setup -q -n %{name}-%{version}-%{_rc}
-%patch0 -p0
+%patch -P0 -p0
 grep -E "^pwc-objs" Makefile > Makefile.new
 echo "obj-m	+= pwc.o" >> Makefile.new
 echo "CFLAGS	+= -DXAWTV_HAS_BEEN_FIXED=1" >> Makefile.new
